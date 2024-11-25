@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Vahui_Box</title>
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background-color: #F3E8CB;
+}
+
+#container {
+  width: 300px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #F2C6B4;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #FBAFAF;
+}
+</style>
+</head>
+<body>
+
+<div id="container">
+  <h1>VAHUI_BOX</h1>
+  <img id="catImage" src="/images/icon.png" alt="WTF"><br><br>
+  <button onclick="changeImage()" style="background-color:light;">-----Change mem----</button>
+</div>
+
+<script>
+let images = ["/images/mem0.png", "/images/mem1.png", "/images/mem3.jpeg", "/images/mem4.png", "/images/mem5.jpeg", "/images/mem6.jpeg", "/images/mem7.jpeg", "/images/mem8.jpeg", "/images/mem9.jpeg", "/images/mem10.jpeg", ];
+let currentImageIndex = 0;
+
+function changeImage() {
+  currentImageIndex = (currentImageIndex + 1) % images.length;
+  document.getElementById("catImage").src = images[currentImageIndex];
+}
+</script>
+
+</body>
+</html>
