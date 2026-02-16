@@ -1,88 +1,406 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <meta charset="utf-8">
-<title>Vahui_Box</title>
-<style>
-body {
-  font-family: sans-serif;
-  text-align: center;
-  background-color: #FFE8DF;
-  border-radius: 10px;
-  touch-action: manipulation;
-  user-select: none;
-  height: 100vh;
-  margin: 0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎖️ Шкаф медалей ТГК</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-#container {
-  width: 90%;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #FFFFFF;
-  height: calc(175vh - 13px);
-  display: flex;
-  flex-direction: column;
-  /* justify-content: flex-start;  <-  Это изменение */
-}
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #2b2a27 0%, #4a3f35 100%);
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
 
-</style>
+        .cabinet {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8), 0 20px 30px rgba(0, 0, 0, 0.6);
+            border-radius: 30px 30px 20px 20px;
+            padding: 20px 30px 50px;
+            border: 1px solid #8b7a62;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Верхняя планка шкафа */
+        .cabinet-header {
+            background: #6b5a48;
+            height: 40px;
+            margin: -20px -30px 20px -30px;
+            border-radius: 30px 30px 0 0;
+            box-shadow: inset 0 -2px 5px #3a2e22, 0 2px 10px black;
+            border-bottom: 3px solid #c0a16b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6d5b8;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 0 #3a2e22;
+        }
+
+        .shelf-label {
+            color: #e6d5b8;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            border-bottom: 3px solid #c0a16b;
+            margin: 30px 0 25px 0;
+            padding-bottom: 8px;
+            font-weight: 400;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #2b1e12;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shelf-label::before,
+        .shelf-label::after {
+            content: "✦";
+            color: #c0a16b;
+            font-size: 1.5rem;
+            text-shadow: 0 2px 0 #4a3f35;
+        }
+
+        .medals-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 30px 20px;
+            justify-items: center;
+            align-items: start;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Эффект полки (тень под каждым рядом) */
+        .medals-container::after {
+            content: '';
+            display: block;
+            height: 10px;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.3));
+            grid-column: 1 / -1;
+            margin-top: -15px;
+        }
+
+        .medal-item {
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 35% 35%, #fff3cf, #b28b54);
+            border-radius: 50%;
+            box-shadow: 
+                0 12px 0 #6b4f2a,
+                0 15px 15px rgba(0, 0, 0, 0.6),
+                inset 0 -3px 8px rgba(255, 215, 0, 0.6),
+                inset 0 3px 10px #fff6d5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease-out;
+            border: 4px solid #f7e29c;
+            font-size: 3.5rem;
+            position: relative;
+            cursor: default;
+        }
+
+        /* Блик на медали */
+        .medal-item::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 25%;
+            height: 25%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 80%);
+            border-radius: 50%;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .medal-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 8px 0 #6b4f2a,
+                0 22px 25px rgba(0, 0, 0, 0.7),
+                inset 0 -2px 8px gold,
+                inset 0 3px 12px white;
+        }
+
+        /* Для картинок внутри медалей */
+        .medal-item img {
+            width: 75%;
+            height: 75%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+            border-radius: 50%;
+        }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #b8a88b;
+            font-size: 1.5rem;
+            padding: 60px 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50px;
+            border: 2px dashed #7f6e56;
+            font-style: italic;
+            text-shadow: 0 2px 3px black;
+            letter-spacing: 2px;
+        }
+
+        .footer-info {
+            margin-top: 40px;
+            padding: 15px;
+            background: rgba(30, 25, 20, 0.7);
+            border-radius: 60px;
+            text-align: center;
+            color: #bc9f73;
+            border: 1px solid #5e4f3b;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .counter {
+            background: #3a3127;
+            padding: 5px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            color: #e6cba2;
+            font-weight: bold;
+            margin-top: 10px;
+            border: 1px solid #9c8844;
+        }
+
+        /* Анимация появления новой медали */
+        @keyframes appear {
+            0% { transform: scale(0.2) rotate(-30deg); opacity: 0; }
+            80% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        .medal-item.new {
+            animation: appear 0.4s ease-out;
+        }
+    </style>
 </head>
 <body>
+    <div class="cabinet">
+        <div class="cabinet-header">
+            ⚜️ КОЛЛЕКЦИЯ МЕДАЛЕЙ ⚜️
+        </div>
 
-   <div id="container">
-     <h1>VAHUI_BOX</h1>
-     <p>
-         Подпищечники мои, на этой страничке я буду писать всякую ерунду и никому не нужные статьи. <br>
-         Если вам будет скучно и вы не будете знать чем себя занять, то можете тратить свое драгоценное время в это мусорной яме<br>
-         А пока хочу похвасться смешнявками, которым я пока не могу найти применение:
-     </p>
-           <form method="post">
-        <p><strong>text: Текстовое поле</strong></p>
-        <input type="text" name="username" placeholder="Введите имя пользователя">
+        <!-- Полка с новыми медалями (свежие всегда сверху) -->
+        <div class="shelf-label">НОВЫЕ ПОСТУПЛЕНИЯ</div>
+        <div class="medals-container" id="medalGrid">
+            <!-- Медали будут вставлены сюда через JavaScript -->
+        </div>
 
-        <p><strong></strong></p>
-        <input type="password" name="password" placeholder="Введите пароль"> <br> <br>
+        <div class="footer-info">
+            <div class="counter" id="medalCounter">У вас 0 медалей</div>
+            <div style="margin-top: 10px; opacity: 0.7;">✨ Переходи по ссылкам из ТГК, чтобы получать новые медали ✨</div>
+        </div>
+    </div>
 
-        <input type="radio" name="color" value="red" id="red">
-        <label for="red">Красный:</label>
-        <input type="radio" name="color" value="green" id="green" style="color: lightgreen;">
-        <label for="red">Зеленый:</label>
-        <input type="radio" name="color" value="blue" id="blue">
-        <label for="red">Синий:</label> <br> <br>
+    <script>
+        (function() {
+            // ==================== БАЗА ДАННЫХ МЕДАЛЕЙ ====================
+            // Здесь ты можешь добавлять сколько угодно медалей
+            const medalDatabase = {
+                // Формат: "уникальный-id": { name: "Название", emoji: "🎖️" (или другой символ/цифра) }
+                // Совет: используй числа, но можно и текст
+                "welcome": { name: "Первая встреча", emoji: "🌟" },
+                "1": { name: "Пионер", emoji: "🏅" },
+                "2": { name: "Знаток", emoji: "📚" },
+                "3": { name: "Друзья", emoji: "🤝" },
+                "4": { name: "Активный", emoji: "⚡" },
+                "5": { name: "Ветеран", emoji: "🎯" },
+                "summer": { name: "Летняя", emoji: "☀️" },
+                "gold": { name: "Золотая", emoji: "🥇" },
+                "silver": { name: "Серебряная", emoji: "🥈" },
+                "bronze": { name: "Бронзовая", emoji: "🥉" },
+                "star": { name: "Звезда", emoji: "⭐" },
+                "heart": { name: "Сердечная", emoji: "❤️" },
+                "tgk1": { name: "Юбилей канала", emoji: "🎉" },
+                "42": { name: "Глубокая мысль", emoji: "🔮" },
+                "007": { name: "Агент", emoji: "🕶️" },
+                "quest": { name: "Прохождение", emoji: "🗝️" }
+            };
 
-        <input type="checkbox" name="agree" value="yes"> Согласен с условиями
-        <input type="checkbox" name="agree" value="no"> Не согласен с условиями <br> <br>
+            // Ключ для хранения в браузере
+            const STORAGE_KEY = 'tgMedalCollection';
 
-        <input type="submit" value="Отправить"> <br> <br>
+            // Загружаем сохраненные медали пользователя или создаем пустой массив
+            let userMedals = [];
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    userMedals = JSON.parse(saved);
+                    // Проверяем, что это массив
+                    if (!Array.isArray(userMedals)) userMedals = [];
+                }
+            } catch (e) {
+                console.warn("Не удалось загрузить сохраненные медали", e);
+                userMedals = [];
+            }
 
-        <input type="color" name="color" value="#ff0000"> <br> <br>
+            // Получаем ссылки на элементы страницы
+            const medalGrid = document.getElementById('medalGrid');
+            const medalCounter = document.getElementById('medalCounter');
 
-        <input type="date" name="birthday" value="1990-01-01"> <br> <br>
+            // ==================== ФУНКЦИЯ ОТОБРАЖЕНИЯ МЕДАЛЕЙ ====================
+            function renderMedals(newlyAddedId = null) {
+                if (!medalGrid) return;
 
-        <input type="datetime" name="datetime" value="1990-01-01T12:00:00+03:00"> <br> <br>
+                // Очищаем сетку
+                medalGrid.innerHTML = '';
 
-        <input type="email" name="email" placeholder="Введите ваш email"> <br> <br>
+                if (userMedals.length === 0) {
+                    // Показываем красивое сообщение, если медалей нет
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'empty-message';
+                    emptyDiv.textContent = '✨ Коллекция пуста... Получи первую медаль из Telegram! ✨';
+                    medalGrid.appendChild(emptyDiv);
+                    medalCounter.textContent = 'У вас 0 медалей';
+                    return;
+                }
 
-        <input type="month" name="month" value="2022-01"> <br> <br>
+                // Сортируем так, чтобы последние добавленные (новые) были первыми
+                // Так как мы добавляем новые в начало массива, массив уже в правильном порядке
+                // Но на всякий случай делаем реверс, если вдруг кто-то менял логику
+                // userMedals - это порядок: новые в начале
 
-        <input type="number" name="age" value="25"> <br> <br>
+                // Перебираем все ID медалей из массива пользователя
+                userMedals.forEach(medalId => {
+                    const medalData = medalDatabase[medalId];
+                    
+                    // Если медаль вдруг не найдена в базе (удалили из базы, но у юзера осталась)
+                    if (!medalData) {
+                        // Можно пропустить или показать заглушку
+                        return;
+                    }
 
-        <input type="range" name="range" min="0" max="1000" value="50"> <br> <br>
+                    const medalDiv = document.createElement('div');
+                    medalDiv.className = 'medal-item';
+                    if (medalId === newlyAddedId) {
+                        medalDiv.classList.add('new'); // анимация появления
+                    }
+                    medalDiv.title = medalData.name;
 
-        <input type="tel" name="phone" placeholder="+7(123)456-78-90"> <br> <br>
+                    // Если мы хотим использовать эмодзи (проще всего)
+                    medalDiv.textContent = medalData.emoji || '🏅';
 
-        <input type="time" name="time" value="12:00"> <br> <br>
+                    // Альтернатива: если бы мы хотели картинки, то нужно раскомментировать:
+                    /*
+                    if (medalData.file) {
+                        const img = document.createElement('img');
+                        img.src = `assets/medals/${medalData.file}`;
+                        img.alt = medalData.name;
+                        medalDiv.appendChild(img);
+                    } else {
+                        medalDiv.textContent = medalData.emoji || '🏅';
+                    }
+                    */
 
-        <input type="week" name="week" value="2022-W01"> <br> <br>
+                    medalGrid.appendChild(medalDiv);
+                });
 
-        <input type="file" name="file"> <br> <br>
+                // Обновляем счетчик
+                medalCounter.textContent = `У вас ${userMedals.length} ${getMedalWord(userMedals.length)}`;
+            }
 
+            // Склонение слова "медаль"
+            function getMedalWord(count) {
+                if (count % 10 === 1 && count % 100 !== 11) return 'медаль';
+                if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)) return 'медали';
+                return 'медалей';
+            }
 
-    </form>
-   </div>
+            // ==================== ФУНКЦИЯ ДОБАВЛЕНИЯ МЕДАЛИ ====================
+            function addMedal(medalId) {
+                // Проверяем, существует ли такая медаль в базе
+                if (!medalDatabase[medalId]) {
+                    console.warn('Медаль не найдена в базе:', medalId);
+                    alert('❌ Эта медаль ещё не создана в коллекции');
+                    return false;
+                }
 
+                // Проверяем, нет ли уже такой медали у пользователя
+                if (!userMedals.includes(medalId)) {
+                    // Добавляем в НАЧАЛО массива (чтобы новая была сверху)
+                    userMedals.unshift(medalId);
+                    
+                    // Сохраняем в localStorage
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(userMedals));
+                    } catch (e) {
+                        console.warn('Ошибка сохранения', e);
+                    }
+                    
+                    // Обновляем стену с анимацией для новой медали
+                    renderMedals(medalId);
+                    
+                    // Показываем уведомление (по желанию)
+                    alert(`🎉 Поздравляем! Вы получили медаль: ${medalDatabase[medalId].name}`);
+                    return true;
+                } else {
+                    alert('🏅 Эта медаль уже есть в вашей коллекции');
+                    return false;
+                }
+            }
+
+            // ==================== ОБРАБОТКА ПАРАМЕТРОВ ИЗ URL ====================
+            function checkUrlForNewMedal() {
+                // Способ 1: Хэш (рекомендуется) — ссылка вида: page.html#medal=welcome
+                const hash = window.location.hash.substring(1); // убираем #
+                if (hash.startsWith('medal=')) {
+                    const medalId = hash.split('=')[1];
+                    if (medalId) {
+                        // Немного задержки, чтобы страница точно загрузилась
+                        setTimeout(() => {
+                            addMedal(medalId);
+                        }, 100);
+                        // Очищаем хэш, чтобы при обновлении не добавилось снова
+                        history.replaceState(null, '', window.location.pathname + window.location.search);
+                        return true;
+                    }
+                }
+
+                // Способ 2: Параметр запроса (для универсальности) — ссылка вида: page.html?id=welcome
+                const urlParams = new URLSearchParams(window.location.search);
+                const medalIdFromQuery = urlParams.get('medal') || urlParams.get('id');
+                if (medalIdFromQuery) {
+                    setTimeout(() => {
+                        addMedal(medalIdFromQuery);
+                    }, 100);
+                    // Убираем параметр из URL (чистим историю)
+                    const newUrl = window.location.pathname + window.location.hash;
+                    history.replaceState(null, '', newUrl);
+                    return true;
+                }
+            }
+
+            // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+            // Первоначальная отрисовка
+            renderMedals();
+
+            // Проверяем, не пришли ли мы по ссылке с медалью
+            checkUrlForNewMedal();
+
+            // Для отладки: выводим в консоль подсказку
+            console.log('🔥 Медаль-шкаф готов! Чтобы добавить медаль, используй ссылки вида:');
+            console.log(window.location.origin + window.location.pathname + '#medal=welcome');
+            console.log('Доступные медали:', Object.keys(medalDatabase).join(', '));
+        })();
+    </script>
 </body>
 </html>
